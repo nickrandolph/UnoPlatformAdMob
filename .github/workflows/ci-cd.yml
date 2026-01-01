@@ -16,6 +16,9 @@ env:
 jobs:
   build:
     runs-on: windows-latest
+    permissions:
+      contents: read
+      packages: write
     
     steps:
     - name: Checkout code
@@ -71,6 +74,9 @@ jobs:
   publish:
     needs: build
     runs-on: windows-latest
+    permissions:
+      contents: read
+      packages: write
     if: github.event_name == 'release'
     
     steps:
