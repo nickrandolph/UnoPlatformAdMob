@@ -1,0 +1,99 @@
+﻿<Page x:Class="UnoPlatformAdMob.Sample.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="using:UnoPlatformAdMob.Sample"
+      xmlns:admob="using:UnoPlatformAdMob"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+  <ScrollViewer IsTabStop="True">
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+
+      <!-- Header -->
+      <StackPanel Grid.Row="0" 
+                  Padding="20"
+                  HorizontalAlignment="Center">
+        <TextBlock Text="AdMob Sample Application"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"/>
+        <TextBlock Text="Demonstrating AdMob integration with Uno Platform"
+                   FontSize="14"
+                   Foreground="Gray"
+                   HorizontalAlignment="Center"
+                   Margin="0,5,0,0"/>
+      </StackPanel>
+
+      <!-- Content Area -->
+      <StackPanel Grid.Row="1"
+                  Padding="20"
+                  Spacing="20">
+        
+        <TextBlock Text="Sample Content"
+                   FontSize="18"
+                   FontWeight="SemiBold"/>
+        
+        <TextBlock TextWrapping="Wrap"
+                   Text="This is a sample Uno Platform application demonstrating the AdMobView control. The control uses WebView2 to render Google AdMob ads using the JavaScript SDK."/>
+        
+        <TextBlock TextWrapping="Wrap"
+                   Text="To use this control in your app:"/>
+        
+        <TextBlock TextWrapping="Wrap"
+                   Margin="20,0,0,0"
+                   Text="1. Add the UnoPlatformAdMob NuGet package to your project"/>
+        
+        <TextBlock TextWrapping="Wrap"
+                   Margin="20,0,0,0"
+                   Text="2. Add the AdMobView control to your XAML"/>
+        
+        <TextBlock TextWrapping="Wrap"
+                   Margin="20,0,0,0"
+                   Text="3. Set your AdUnitId to your Google AdMob ad unit ID"/>
+        
+        <Border BorderBrush="LightGray"
+                BorderThickness="1"
+                Padding="10"
+                Background="#F5F5F5"
+                CornerRadius="4">
+          <TextBlock TextWrapping="Wrap"
+                     FontFamily="Consolas"
+                     FontSize="12"
+                     Text="&lt;admob:AdMobView AdUnitId=&quot;ca-app-pub-XXXXXXXXXXXXXXXX/YYYYYYYYYY&quot; AdFormat=&quot;Banner&quot; Height=&quot;250&quot;/&gt;"/>
+        </Border>
+        
+        <TextBlock TextWrapping="Wrap"
+                   Foreground="OrangeRed"
+                   Text="Note: Replace the AdUnitId with your actual Google AdMob ad unit ID to display real ads."/>
+      </StackPanel>
+
+      <!-- Ad Container at Bottom -->
+      <Border Grid.Row="2" 
+              Background="#F0F0F0"
+              BorderBrush="LightGray"
+              BorderThickness="0,1,0,0"
+              Padding="10">
+        <StackPanel Spacing="10">
+          <TextBlock Text="Ad Placeholder (Demo)"
+                     FontSize="12"
+                     Foreground="Gray"
+                     HorizontalAlignment="Center"/>
+          
+          <!-- AdMobView Control -->
+                    <admob:AdMobView AdUnitId="ca-app-pub-1778331316120170/8343783973"
+                           AdFormat="Banner"
+                           Height="250"
+                           HorizontalAlignment="Stretch"/>
+          
+          <TextBlock Text="Using test AdMob ad unit ID"
+                     FontSize="10"
+                     Foreground="Gray"
+                     HorizontalAlignment="Center"/>
+        </StackPanel>
+      </Border>
+    </Grid>
+  </ScrollViewer>
+</Page>

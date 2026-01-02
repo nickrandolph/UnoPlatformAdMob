@@ -1,0 +1,10 @@
+{
+  "background_color": "#ffffff",
+  "description": "UnoPlatformAdMob.Sample",
+  "display": "standalone",
+  "name": "UnoPlatformAdMob.Sample",
+  "short_name": "UnoPlatformAdMob.Sample",
+  "start_url": "/index.html",
+  "theme_color": "#ffffff",
+  "scope": "/"
+}

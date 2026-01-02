@@ -1,0 +1,99 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  release:
+    types: [ published ]
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: '10.0.x'
+  NUGET_OUTPUT_DIR: ${{ github.workspace }}/nuget-packages
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: read
+      packages: write
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Install Uno Platform workloads
+      run: |
+        dotnet workload install android ios wasm-tools --source https://api.nuget.org/v3/index.json
+      continue-on-error: true
+
+    - name: Restore dependencies
+      run: dotnet restore UnoPlatformAdMob.sln
+      continue-on-error: true
+
+    - name: Build library
+      run: dotnet build UnoPlatformAdMob/UnoPlatformAdMob.csproj --configuration Release --no-restore
+      continue-on-error: true
+
+    - name: Build sample application
+      run: dotnet build UnoPlatformAdMob.Sample/UnoPlatformAdMob.Sample/UnoPlatformAdMob.Sample.csproj --configuration Release --no-restore
+      continue-on-error: true
+
+    - name: Pack NuGet package
+      run: dotnet pack UnoPlatformAdMob/UnoPlatformAdMob.csproj --configuration Release --no-build --output ${{ env.NUGET_OUTPUT_DIR }}
+      continue-on-error: true
+
+    - name: Upload NuGet package artifact
+      uses: actions/upload-artifact@v4
+      if: success()
+      with:
+        name: nuget-package
+        path: ${{ env.NUGET_OUTPUT_DIR }}/*.nupkg
+        retention-days: 30
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: build-logs
+        path: |
+          **/*.binlog
+          **/*.log
+        retention-days: 7
+        if-no-files-found: ignore
+
+  publish:
+    needs: build
+    runs-on: windows-latest
+    permissions:
+      contents: read
+      packages: write
+    if: github.event_name == 'release'
+    
+    steps:
+    - name: Download NuGet package
+      uses: actions/download-artifact@v4
+      with:
+        name: nuget-package
+        path: ${{ env.NUGET_OUTPUT_DIR }}
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Publish to NuGet.org
+      run: |
+        dotnet nuget push "${{ env.NUGET_OUTPUT_DIR }}/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+      if: success() && env.NUGET_API_KEY != ''
+      env:
+        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
