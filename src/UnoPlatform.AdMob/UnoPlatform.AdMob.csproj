@@ -38,6 +38,16 @@
     <None Include="../../README.md" Pack="true" PackagePath="/"/>
   </ItemGroup>
 
+  <!-- Android Google Mobile Ads SDK -->
+  <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
+    <PackageReference Include="Xamarin.Google.Android.Play.Services.Ads" Version="23.5.0.3" />
+  </ItemGroup>
+
+  <!-- iOS Google Mobile Ads SDK -->
+  <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
+    <PackageReference Include="Xamarin.Google.iOS.MobileAds" Version="11.10.0.1" />
+  </ItemGroup>
+
   <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
     <!--
     If you encounter this error message:
