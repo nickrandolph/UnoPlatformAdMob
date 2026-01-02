@@ -1,0 +1,58 @@
+<Page x:Class="AdMobSample.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="using:AdMobSample"
+      xmlns:admob="using:Uno.AdMob"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+  <ScrollViewer IsTabStop="True">
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+
+      <StackPanel Grid.Row="0"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        Spacing="20">
+        <TextBlock AutomationProperties.AutomationId="HelloTextBlock"
+          Text="AdMob Sample App"
+          FontSize="32"
+          FontWeight="Bold"
+          HorizontalAlignment="Center" />
+        
+        <TextBlock 
+          Text="Welcome to Uno.AdMob!"
+          FontSize="20"
+          HorizontalAlignment="Center" />
+        
+        <TextBlock 
+          Text="This sample demonstrates AdMob banner ads in an Uno Platform application."
+          TextWrapping="Wrap"
+          MaxWidth="400"
+          HorizontalAlignment="Center"
+          TextAlignment="Center" />
+
+        <StackPanel Spacing="10" Margin="0,20,0,0">
+          <TextBlock Text="Features:" FontWeight="SemiBold" />
+          <TextBlock Text="• Cross-platform ad support" />
+          <TextBlock Text="• Multiple ad sizes" />
+          <TextBlock Text="• Event handling" />
+          <TextBlock Text="• Easy integration" />
+        </StackPanel>
+      </StackPanel>
+
+      <!-- AdMob Banner Ad -->
+      <Border Grid.Row="1" 
+              Background="#F0F0F0"
+              BorderBrush="#CCCCCC"
+              BorderThickness="0,1,0,0"
+              Padding="10">
+        <admob:BannerAd 
+          x:Name="BannerAd"
+          AdSize="Banner"
+          HorizontalAlignment="Center" />
+      </Border>
+    </Grid>
+  </ScrollViewer>
+</Page>
