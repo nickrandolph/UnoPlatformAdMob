@@ -1,0 +1,45 @@
+<Project Sdk="MSBuild.Sdk.Extras/3.0.23">
+  <PropertyGroup>
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('Windows')) or '$(EnableWindowsTargeting)' == 'true'">$(TargetFrameworks);net7.0-windows10.0.18362</TargetFrameworks>
+    <TargetFrameworks>$(TargetFrameworks);net7.0</TargetFrameworks>
+    <_CanUseMobileTargets Condition="!$([MSBuild]::IsOSPlatform('Linux'))">true</_CanUseMobileTargets>
+    <TargetFrameworks Condition="'$(_CanUseMobileTargets)'=='true'">$(TargetFrameworks);net7.0-ios</TargetFrameworks>
+    <TargetFrameworks Condition="'$(_CanUseMobileTargets)'=='true'">$(TargetFrameworks);net7.0-maccatalyst</TargetFrameworks>
+    <TargetFrameworks Condition="'$(_CanUseMobileTargets)'=='true'">$(TargetFrameworks);net7.0-android</TargetFrameworks>
+    <!-- Ensures the .xr.xml files are generated in a proper layout folder -->
+    <GenerateLibraryLayout>true</GenerateLibraryLayout>
+    
+    <!-- NuGet Package Metadata -->
+    <PackageId>UnoPlatform.AdMob</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>UnoPlatform AdMob Contributors</Authors>
+    <Company>Uno Platform</Company>
+    <Description>Google Mobile Ads (AdMob) wrapper for Uno Platform. Provides cross-platform support for displaying banner, interstitial, and rewarded ads in Uno Platform applications.</Description>
+    <PackageTags>uno;uno-platform;admob;google-ads;mobile-ads;advertising</PackageTags>
+    <PackageProjectUrl>https://github.com/nickrandolph/UnoPlatformAdMob</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/nickrandolph/UnoPlatformAdMob</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net7.0-windows10.0.18362'">
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.3" />
+    <FrameworkReference Update="Microsoft.Windows.SDK.NET.Ref" RuntimeFrameworkVersion="10.0.22000.24" />
+    <FrameworkReference Update="Microsoft.Windows.SDK.NET.Ref" TargetingPackVersion="10.0.22000.24" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'!='net7.0-windows10.0.18362'">
+    <PackageReference Include="Uno.WinUI" Version="4.7.56" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'!='net7.0-windows10.0.18362'">
+    <Content Include="Assets\**" />
+    <Page Include="**\*.xaml" Exclude="bin\**\*.xaml;obj\**\*.xaml" />
+    <Compile Update="**\*.xaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+    <PriResource Include="**\*.resw" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Include="**\*.xaml" Exclude="bin\**\*.xaml;obj\**\*.xaml" />
+  </ItemGroup>
+</Project>

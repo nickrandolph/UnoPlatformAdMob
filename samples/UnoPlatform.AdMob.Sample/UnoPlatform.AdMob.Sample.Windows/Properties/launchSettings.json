@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "UnoPlatform.AdMob.Sample.Windows": {
+      "commandName": "MsixPackage"
+    }
+  }
+}

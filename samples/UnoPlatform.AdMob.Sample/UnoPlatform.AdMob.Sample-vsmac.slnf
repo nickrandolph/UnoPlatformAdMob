@@ -1,0 +1,16 @@
+{
+  "solution": {
+    "path": "UnoPlatform.AdMob.Sample.sln",
+    "projects": [
+		"UnoPlatform.AdMob.Sample\\UnoPlatform.AdMob.Sample.csproj",
+
+		"UnoPlatform.AdMob.Sample.Mobile\\UnoPlatform.AdMob.Sample.Mobile.csproj",
+
+		"UnoPlatform.AdMob.Sample.Wasm\\UnoPlatform.AdMob.Sample.Wasm.csproj",
+
+		"UnoPlatform.AdMob.Sample.Skia.Gtk\\UnoPlatform.AdMob.Sample.Skia.Gtk.csproj",
+
+		"UnoPlatform.AdMob.Sample.Skia.Gtk\\UnoPlatform.AdMob.Sample.Skia.Gtk.csproj",
+    ]
+  }
+}

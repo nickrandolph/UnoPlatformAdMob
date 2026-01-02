@@ -1,0 +1,97 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  release:
+    types: [ published ]
+
+env:
+  DOTNET_VERSION: '10.0.x'
+  CONFIGURATION: Release
+
+jobs:
+  build:
+    name: Build Library
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+    - name: Install Uno Platform templates
+      run: dotnet new install Uno.ProjectTemplates.Dotnet
+      
+    - name: Restore dependencies
+      run: dotnet restore src/UnoPlatform.AdMob/UnoPlatform.AdMob.csproj
+      
+    - name: Build library
+      run: dotnet build src/UnoPlatform.AdMob/UnoPlatform.AdMob.csproj --configuration ${{ env.CONFIGURATION }} --no-restore
+      
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-output
+        path: src/UnoPlatform.AdMob/bin/${{ env.CONFIGURATION }}/
+        
+  package:
+    name: Create NuGet Package
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+    - name: Install Uno Platform templates
+      run: dotnet new install Uno.ProjectTemplates.Dotnet
+      
+    - name: Restore dependencies
+      run: dotnet restore src/UnoPlatform.AdMob/UnoPlatform.AdMob.csproj
+      
+    - name: Build and pack
+      run: |
+        dotnet build src/UnoPlatform.AdMob/UnoPlatform.AdMob.csproj --configuration ${{ env.CONFIGURATION }}
+        dotnet pack src/UnoPlatform.AdMob/UnoPlatform.AdMob.csproj --configuration ${{ env.CONFIGURATION }} --no-build --output ./packages
+        
+    - name: Upload NuGet package
+      uses: actions/upload-artifact@v4
+      with:
+        name: nuget-package
+        path: ./packages/*.nupkg
+        
+  publish:
+    name: Publish to NuGet
+    runs-on: ubuntu-latest
+    needs: package
+    if: github.event_name == 'release'
+    
+    steps:
+    - name: Download NuGet package
+      uses: actions/download-artifact@v4
+      with:
+        name: nuget-package
+        path: ./packages
+        
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+    - name: Publish to NuGet.org
+      run: dotnet nuget push ./packages/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+      
+    - name: Publish to GitHub Packages
+      run: dotnet nuget push ./packages/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --skip-duplicate
