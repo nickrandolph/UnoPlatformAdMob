@@ -1,0 +1,95 @@
+name: Build and Package
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: '10.0.x'
+  NUGET_DIRECTORY: ${{ github.workspace }}/nuget
+
+jobs:
+  build:
+    name: Build Library
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Install workloads
+      run: |
+        dotnet workload install android wasm-tools
+    
+    - name: Restore dependencies
+      run: dotnet restore src/Uno.AdMob/Uno.AdMob.csproj
+    
+    - name: Build
+      run: dotnet build src/Uno.AdMob/Uno.AdMob.csproj --configuration Release --no-restore
+    
+    - name: Create NuGet package
+      run: dotnet pack src/Uno.AdMob/Uno.AdMob.csproj --configuration Release --output ${{ env.NUGET_DIRECTORY }} --no-build
+    
+    - name: Upload NuGet package artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: nuget-package
+        path: ${{ env.NUGET_DIRECTORY }}/*.nupkg
+        retention-days: 7
+
+  build-sample:
+    name: Build Sample App
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Install workloads
+      run: |
+        dotnet workload install android wasm-tools
+    
+    - name: Restore dependencies
+      run: dotnet restore samples/AdMobSample/AdMobSample.sln
+    
+    - name: Build sample
+      run: dotnet build samples/AdMobSample/AdMobSample.sln --configuration Release --no-restore
+
+  publish:
+    name: Publish to NuGet
+    needs: [ build, build-sample ]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Download NuGet package artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: nuget-package
+        path: ${{ env.NUGET_DIRECTORY }}
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Publish to NuGet
+      if: ${{ secrets.NUGET_API_KEY != '' }}
+      run: |
+        dotnet nuget push "${{ env.NUGET_DIRECTORY }}/*.nupkg" \
+          --api-key ${{ secrets.NUGET_API_KEY }} \
+          --source https://api.nuget.org/v3/index.json \
+          --skip-duplicate
