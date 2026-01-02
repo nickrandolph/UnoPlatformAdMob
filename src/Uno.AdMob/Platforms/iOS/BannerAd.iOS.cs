@@ -62,7 +62,7 @@ public partial class BannerAd
                 };
             }
 
-            var request = Request.GetDefaultRequest();
+            var request = Google.MobileAds.Request.GetDefaultRequest();
             _bannerView.LoadRequest(request);
         }
         catch (Exception ex)
