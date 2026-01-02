@@ -1,4 +1,4 @@
-<Page x:Class="UnoPlatformAdMob.Sample.MainPage"
+﻿<Page x:Class="UnoPlatformAdMob.Sample.MainPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:local="using:UnoPlatformAdMob.Sample"
@@ -83,7 +83,7 @@
                      HorizontalAlignment="Center"/>
           
           <!-- AdMobView Control -->
-          <admob:AdMobView AdUnitId="ca-app-pub-3940256099942544/6300978111"
+                    <admob:AdMobView AdUnitId="ca-app-pub-1778331316120170/8343783973"
                            AdFormat="Banner"
                            Height="250"
                            HorizontalAlignment="Stretch"/>
