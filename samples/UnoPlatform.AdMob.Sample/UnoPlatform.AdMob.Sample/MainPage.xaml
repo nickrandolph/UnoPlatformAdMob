@@ -1,0 +1,129 @@
+﻿<Page x:Class="UnoPlatform.AdMob.Sample.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="using:UnoPlatform.AdMob.Sample"
+      xmlns:admob="using:UnoPlatform.AdMob"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+  <ScrollViewer IsTabStop="True">
+    <StackPanel Padding="20" Spacing="20">
+      <TextBlock Text="Google AdMob Sample" 
+                 FontSize="32" 
+                 FontWeight="Bold"
+                 HorizontalAlignment="Center"/>
+      
+      <TextBlock Text="This sample demonstrates the AdMob wrapper for Uno Platform." 
+                 TextWrapping="Wrap"
+                 HorizontalAlignment="Center"/>
+
+      <!-- Banner Ad Section -->
+      <Border BorderBrush="{ThemeResource SystemAccentColor}" 
+              BorderThickness="2" 
+              Padding="16" 
+              CornerRadius="8">
+        <StackPanel Spacing="12">
+          <TextBlock Text="Banner Ad" 
+                     FontSize="24" 
+                     FontWeight="SemiBold"/>
+          
+          <TextBlock Text="Standard banner ad (320x50)" 
+                     TextWrapping="Wrap"/>
+          
+          <admob:BannerAdView x:Name="BannerAd"
+                              AdUnitId="ca-app-pub-3940256099942544/6300978111"
+                              Height="60"
+                              HorizontalAlignment="Center"
+                              Background="LightGray"
+                              AdLoaded="BannerAd_AdLoaded"
+                              AdFailedToLoad="BannerAd_AdFailedToLoad"/>
+          
+          <Button Content="Load Banner Ad" 
+                  Click="LoadBannerAd_Click"
+                  HorizontalAlignment="Center"/>
+          
+          <TextBlock x:Name="BannerStatusText" 
+                     Text="Banner status: Not loaded"
+                     FontStyle="Italic"
+                     HorizontalAlignment="Center"/>
+        </StackPanel>
+      </Border>
+
+      <!-- Interstitial Ad Section -->
+      <Border BorderBrush="{ThemeResource SystemAccentColor}" 
+              BorderThickness="2" 
+              Padding="16" 
+              CornerRadius="8">
+        <StackPanel Spacing="12">
+          <TextBlock Text="Interstitial Ad" 
+                     FontSize="24" 
+                     FontWeight="SemiBold"/>
+          
+          <TextBlock Text="Full-screen ad that appears between content" 
+                     TextWrapping="Wrap"/>
+          
+          <StackPanel Orientation="Horizontal" 
+                      Spacing="8" 
+                      HorizontalAlignment="Center">
+            <Button Content="Load Interstitial" 
+                    Click="LoadInterstitial_Click"/>
+            <Button Content="Show Interstitial" 
+                    Click="ShowInterstitial_Click"
+                    x:Name="ShowInterstitialButton"
+                    IsEnabled="False"/>
+          </StackPanel>
+          
+          <TextBlock x:Name="InterstitialStatusText" 
+                     Text="Interstitial status: Not loaded"
+                     FontStyle="Italic"
+                     HorizontalAlignment="Center"/>
+        </StackPanel>
+      </Border>
+
+      <!-- Rewarded Ad Section -->
+      <Border BorderBrush="{ThemeResource SystemAccentColor}" 
+              BorderThickness="2" 
+              Padding="16" 
+              CornerRadius="8">
+        <StackPanel Spacing="12">
+          <TextBlock Text="Rewarded Ad" 
+                     FontSize="24" 
+                     FontWeight="SemiBold"/>
+          
+          <TextBlock Text="Video ad that rewards users for watching" 
+                     TextWrapping="Wrap"/>
+          
+          <StackPanel Orientation="Horizontal" 
+                      Spacing="8" 
+                      HorizontalAlignment="Center">
+            <Button Content="Load Rewarded Ad" 
+                    Click="LoadRewarded_Click"/>
+            <Button Content="Show Rewarded Ad" 
+                    Click="ShowRewarded_Click"
+                    x:Name="ShowRewardedButton"
+                    IsEnabled="False"/>
+          </StackPanel>
+          
+          <TextBlock x:Name="RewardedStatusText" 
+                     Text="Rewarded status: Not loaded"
+                     FontStyle="Italic"
+                     HorizontalAlignment="Center"/>
+        </StackPanel>
+      </Border>
+
+      <!-- Info Section -->
+      <Border Background="{ThemeResource SystemControlBackgroundAltHighBrush}" 
+              Padding="16" 
+              CornerRadius="8">
+        <StackPanel Spacing="8">
+          <TextBlock Text="ℹ️ About Test Ads" 
+                     FontSize="18" 
+                     FontWeight="SemiBold"/>
+          <TextBlock TextWrapping="Wrap">
+            <Run Text="These ads use Google's test Ad Unit IDs."/>
+            <LineBreak/>
+            <Run Text="For production apps, replace these with your actual Ad Unit IDs from the AdMob console."/>
+          </TextBlock>
+        </StackPanel>
+      </Border>
+    </StackPanel>
+  </ScrollViewer>
+</Page>
