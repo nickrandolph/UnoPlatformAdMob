@@ -133,7 +133,7 @@ namespace UnoPlatform.AdMob
             {
                 var extras = new Android.OS.Bundle();
                 extras.PutString("npa", "1");
-                builder.AddNetworkExtrasBundle(Java.Lang.Class.FromType(typeof(Android.Gms.Ads.AdMob.App.AppOpenAd)), extras);
+                builder.AddNetworkExtrasBundle(Java.Lang.Class.FromType(typeof(Android.Gms.Ads.AdRequest)), extras);
             }
 
             if (!string.IsNullOrEmpty(request.ContentUrl))
