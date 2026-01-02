@@ -18,6 +18,7 @@
     </UnoFeatures>
 
     <!-- NuGet Package Properties -->
+    <IsPackable>true</IsPackable>
     <PackageId>UnoPlatform.AdSense</PackageId>
     <Version>1.0.0</Version>
     <Authors>Uno Platform</Authors>
